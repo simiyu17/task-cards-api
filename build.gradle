@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.0'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.card'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	mapStructVersion = "1.5.3.Final"
+	apacheCommonLang3Version = "3.12.0"
+	javaxXmlBindVersion = "2.4.0-b180830.0359"
+	queryDslVersion = "5.0.0"
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation "org.apache.commons:commons-lang3:${apacheCommonLang3Version}"
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0"
+	implementation("com.querydsl:querydsl-core:${queryDslVersion}")
+	implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
+	annotationProcessor(
+			"com.querydsl:querydsl-apt:${queryDslVersion}:jakarta",
+			"jakarta.persistence:jakarta.persistence-api:3.1.0",
+			'org.projectlombok:lombok',
+			"org.mapstruct:mapstruct-processor:${mapStructVersion}"
+	)
+	implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+	implementation 'org.instancio:instancio-junit:2.15.0'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

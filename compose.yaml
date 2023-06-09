@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql/mysql-server:8.0.32'
+    environment:
+      - 'MYSQL_DATABASE=task_card'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3306'
