@@ -1,5 +1,6 @@
 package com.card.security;
 
+import com.card.auth.exception.UserAuthenticationException;
 import com.card.auth.exception.UserNotFoundException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -59,7 +60,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             return currentUserDetails
                     .loadUserByUsername(JwtTokenUtil.extractUsername(token));
         }catch (JwtException | UserNotFoundException ex){
-            throw new JwtException("Bad/Expired Credentials !!");
+            throw new UserAuthenticationException("Bad/Expired Credentials !!");
         }
     }
 }

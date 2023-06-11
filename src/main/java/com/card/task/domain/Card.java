@@ -3,13 +3,13 @@ package com.card.task.domain;
 import com.card.shared.entity.BaseEntity;
 import com.card.task.dto.CardRequestDto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +22,7 @@ public class Card extends BaseEntity {
 
     private String color;
 
+    @Enumerated(EnumType.STRING)
     private CardStatus cardStatus;
 
     public Card() {
@@ -75,6 +76,10 @@ public class Card extends BaseEntity {
 
     public String getCardStatusOrNull() {
         return Objects.isNull(getCardStatus()) ? "" : getCardStatus().getName();
+    }
+
+    public String getCardCreatorIdOrNull() {
+        return Objects.isNull(getCreatedBy()) ? "" : getCreatedBy().getUsername();
     }
 
     @Override

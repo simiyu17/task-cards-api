@@ -1,22 +1,22 @@
 package com.card.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.card.security.permission.TaskCardServiceOwnerShipInterceptor;
+import com.card.task.service.CardService;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Component
-public class ApplicationConfig {
+@Configuration
+public class ApplicationConfig implements WebMvcConfigurer {
 
-    @Value("${online.banking.client.account.length:14}")
-    private Long clientAccountLength;
+    private final CardService cardService;
 
-    @Value("${online.banking.default.page.size:20}")
-    private Long defaultPageSize;
-
-    public Long getClientAccountLength() {
-        return clientAccountLength;
+    public ApplicationConfig(CardService cardService) {
+        this.cardService = cardService;
     }
 
-    public Long getDefaultPageSize() {
-        return defaultPageSize;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor( new TaskCardServiceOwnerShipInterceptor(cardService) );
     }
 }

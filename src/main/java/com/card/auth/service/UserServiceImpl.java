@@ -10,8 +10,8 @@ import com.card.auth.dto.UserDto;
 import com.card.auth.exception.UserNotFoundException;
 import com.card.security.CurrentUserDetails;
 import com.card.security.JwtTokenUtil;
+import com.card.util.AppConstant;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
           final var userDetails = currentUserDetails.loadUserByUsername(request.username());
           final var user = findUserByUserName(userDetails.getUsername());
           this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, request.password(), userDetails.getAuthorities()));
-          return new LoginResponse("Login Was Successful", JwtTokenUtil.createToken(user));
+          return new LoginResponse(AppConstant.LOGIN_SUCCESS_MESSAGE, JwtTokenUtil.createToken(user));
     }
 
 
@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createDefaultUsers(){
         if (this.userRepository.findAll().isEmpty()) {
-            final var adminUserDto = new UserDto("Daniel", "Simiyu", "admin.admin@yahoo.com", "admin!@#", Set.of("ADMIN"));
-            final var memberUserDto = new UserDto("John", "Doe", "member.member@yahoo.com", "member!@#", Set.of("MEMBER"));
+            final var adminUserDto = new UserDto("Daniel", "Simiyu", AppConstant.DEFAULT_ADMIN_USER_EMAIL_ADDRESS, AppConstant.DEFAULT_ADMIN_USER_PASSWORD, Set.of(AppConstant.ADMIN_ROLE.getName()));
+            final var memberUserDto = new UserDto("John", "Doe", AppConstant.DEFAULT_MEMBER_USER_EMAIL_ADDRESS, AppConstant.DEFAULT_MEMBER_USER_PASSWORD, Set.of(AppConstant.MEMBER_ROLE.getName()));
             this.createUser(adminUserDto);
             this.createUser(memberUserDto);
 

@@ -1,18 +1,22 @@
 package com.card.task.service;
 
+import com.card.task.domain.Card;
 import com.card.task.domain.CardRepositoryWrapper;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
 import com.card.task.dto.CardSearchCriteria;
 import com.card.task.mapper.CardMapper;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Validated
+@Transactional
 public class CardServiceImpl implements CardService{
 
     private final CardRepositoryWrapper cardRepositoryWrapper;
@@ -23,30 +27,35 @@ public class CardServiceImpl implements CardService{
         this.cardMapper = cardMapper;
     }
 
-    @Transactional
     @Override
-    public CardResponseDto createCard(CardRequestDto cardRequestDto) {
+    public CardResponseDto createCard(@Valid CardRequestDto cardRequestDto) {
         return this.cardMapper.fromEntity(this.cardRepositoryWrapper.createCard(cardRequestDto));
     }
 
     @Override
-    public CardResponseDto updateCard(Long cardId, CardRequestDto cardRequestDto) {
+    public CardResponseDto updateCard(Long cardId, @Valid CardRequestDto cardRequestDto) {
         return this.cardMapper.fromEntity(this.cardRepositoryWrapper.updateCard(cardId, cardRequestDto));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CardResponseDto findCardById(Long cardId) {
         return this.cardMapper.fromEntity(this.cardRepositoryWrapper.findCardById(cardId));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CardResponseDto> findAvailableCards(CardSearchCriteria searchCriteria, Pageable pageable) {
         return this.cardMapper.fromEntity(this.cardRepositoryWrapper.findAvailableCards(searchCriteria, pageable).getContent());
     }
 
-    @Transactional
     @Override
     public void deleteCard(Long cardId) {
         this.cardRepositoryWrapper.deleteCard(cardId);
+    }
+
+    @Override
+    public CardResponseDto updateCardStatus(Long cardId, Card.CardStatus status) {
+        return this.cardMapper.fromEntity(this.cardRepositoryWrapper.updateCardStatus(cardId, status));
     }
 }

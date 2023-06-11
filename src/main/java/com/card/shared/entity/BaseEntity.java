@@ -27,8 +27,11 @@ public class BaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    @CreatedBy
     private User createdBy;
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
 
     public User getCreatedBy() {
         return createdBy;

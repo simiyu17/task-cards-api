@@ -4,6 +4,8 @@ package com.card.auth.domain;
 import com.card.auth.dto.UserDto;
 import com.card.shared.entity.BaseEntity;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
@@ -51,8 +53,8 @@ public class User extends BaseEntity {
     }
 
     public static User createUser(UserDto userDto, PasswordEncoder encoder){
-        var user = new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(userDto.getPassword()));
-        userDto.getRoles().forEach(role -> user.addRole(new Role(role)));
+        var user = new User(userDto.firstName(), userDto.lastName(), userDto.email(), encoder.encode(userDto.password()));
+        userDto.roles().forEach(role -> user.addRole(new Role(role)));
         return user;
     }
 
@@ -83,5 +85,26 @@ public class User extends BaseEntity {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o)).append(getId(), user.getId())
+                .append(getFirstName(), user.getFirstName()).append(getLastName(), user.getLastName())
+                .append(getUsername(), user.getUsername()).append(getPassword(), user.getPassword()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode()).append(getId()).append(getFirstName())
+                .append(getLastName()).append(getUsername()).append(getPassword()).toHashCode();
     }
 }

@@ -25,8 +25,8 @@ public final class PageRequestBuilder {
     /**
      * Number of elements in a page.
      */
-    public static final int DEFAULT_PAGE_SIZE = 50;
-    public static final int MAX_PAGE_SIZE = 100;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int MAX_PAGE_SIZE = 30;
 
     public static PageRequest getPageRequest(Integer pageSize, Integer pageNumber, String sortingCriteria) {
         return getPageRequest(pageSize, pageNumber, sortingCriteria, true);

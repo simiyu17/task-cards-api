@@ -13,8 +13,9 @@ public interface CardMapper {
 
     @Mapping(target = "id", expression = "java(card.getId())")
     @Mapping(target = "status", expression = "java(card.getCardStatusOrNull())")
-    @Mapping(target = "dateCreated", expression = "java(card.getDateCreated())")
+    @Mapping(target = "dateCreated", expression = "java(String.valueOf(card.getDateCreated()))")
     @Mapping(source = "name", target = "taskName")
+    @Mapping(target = "createdBy", expression = "java(card.getCardCreatorIdOrNull())")
     CardResponseDto fromEntity(Card card);
 
     List<CardResponseDto> fromEntity(List<Card> card);

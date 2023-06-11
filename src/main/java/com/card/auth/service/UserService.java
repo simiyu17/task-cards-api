@@ -22,4 +22,5 @@ public interface UserService {
     LoginResponse authenticateUser(@Valid final JwtRequest request);
 
     void createDefaultUsers();
+
 }

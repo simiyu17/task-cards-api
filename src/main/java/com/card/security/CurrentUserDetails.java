@@ -4,6 +4,7 @@ import com.card.auth.domain.Role;
 import com.card.auth.domain.User;
 import com.card.auth.domain.UserRepository;
 import com.card.auth.exception.UserNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class CurrentUserDetails implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final var user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("Bad User Credentials !!"));
+        final var user = userRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException("Bad User Credentials !!"));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(user));
     }
 

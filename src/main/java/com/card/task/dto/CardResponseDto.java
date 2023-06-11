@@ -1,7 +1,8 @@
 package com.card.task.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
-import java.time.LocalDate;
 
 public record CardResponseDto(
         Long id,
@@ -9,7 +10,9 @@ public record CardResponseDto(
         String description,
         String color,
         String status,
-        LocalDate dateCreated
+        String dateCreated,
+        @JsonIgnore
+        String createdBy
 ) implements Serializable {
 
 }

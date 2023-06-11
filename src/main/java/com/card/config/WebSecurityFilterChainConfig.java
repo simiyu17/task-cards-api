@@ -3,6 +3,7 @@ package com.card.config;
 
 
 import com.card.security.JWTAuthorizationFilter;
+import com.card.security.permission.TaskCardServiceOwnerShipInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -50,8 +52,7 @@ public class WebSecurityFilterChainConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                    //auth.requestMatchers(GeneralConstants.CLIENT_ENDPOINT+"**").hasRole("CLIENT");
-                    //auth.requestMatchers(GeneralConstants.ADMIN_ENDPOINT+"**").hasRole("ADMIN");
+                    auth.requestMatchers("/cards/**").hasAnyRole("ADMIN", "MEMBER");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -64,9 +65,6 @@ public class WebSecurityFilterChainConfig {
 
         return http.build();
     }
-
-
-
 
 
 }

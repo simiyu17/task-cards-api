@@ -1,14 +1,16 @@
 package com.card.task.api;
 
 import com.card.shared.annotations.RestControllerWithOpenAPIAuthentication;
+import com.card.task.domain.Card;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
 import com.card.task.dto.CardSearchCriteria;
 import com.card.task.service.CardService;
+import com.card.util.AppConstant;
 import com.card.util.PageRequestBuilder;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestControllerWithOpenAPIAuthentication
+@RequestMapping("/cards")
 public class CardController {
 
     private final CardService cardService;
@@ -24,36 +27,36 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @PostMapping(
-            value = "/cards",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<CardResponseDto> createCard(@Valid @RequestBody CardRequestDto cardRequestDto) {
+    @PostMapping
+    public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto cardRequestDto) {
         return new ResponseEntity<>(this.cardService.createCard(cardRequestDto), HttpStatus.CREATED);
     }
 
-    @PutMapping(
-            value = "/cards/{card-id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<CardResponseDto> updateCard(@PathVariable("card-id") Long cardId, @Valid @RequestBody CardRequestDto cardRequestDto) {
+    @PutMapping("/{card-id}")
+    public ResponseEntity<CardResponseDto> updateCard(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId, @RequestBody CardRequestDto cardRequestDto) {
         return new ResponseEntity<>(this.cardService.updateCard(cardId, cardRequestDto), HttpStatus.OK);
     }
 
-    @GetMapping(
-            value = "/cards/{card-id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<CardResponseDto> findCardById(@PathVariable("card-id") Long cardId) {
+    @PutMapping("/{card-id}/status")
+    public ResponseEntity<CardResponseDto> updateCardStatus(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId, @RequestBody Card.CardStatus status) {
+        return new ResponseEntity<>(this.cardService.updateCardStatus(cardId, status), HttpStatus.OK);
+    }
+
+    @GetMapping("/{card-id}")
+    public ResponseEntity<CardResponseDto> findCardById(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId) {
         return new ResponseEntity<>(this.cardService.findCardById(cardId), HttpStatus.OK);
     }
 
-    @GetMapping(
-            value = "/cards",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @GetMapping
+    @Operation(
+            summary = "Retrieve client accounts overview",
+            description = """
+                    Search for task cards
+                    """)
+
+            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "400", description = "Bad Request")
+            @ApiResponse(responseCode = "403", description = "Unauthorized User")
     public ResponseEntity<List<CardResponseDto>> findAvailableCards(@RequestParam(required = false) String cardName,
                                                                     @RequestParam(required = false) String color,
                                                                     @RequestParam(required = false) String cardStatus,
@@ -69,11 +72,8 @@ public class CardController {
         return new ResponseEntity<>(this.cardService.findAvailableCards(searchCriteria, pageRequest), HttpStatus.OK);
     }
 
-    @DeleteMapping(
-            value = "/cards{card-id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<String> deleteCard(@PathVariable("card-id") Long cardId) {
+    @DeleteMapping("/{card-id}")
+    public ResponseEntity<String> deleteCard(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId) {
         this.cardService.deleteCard(cardId);
         return new ResponseEntity<>("Card Deleted Successfully !!", HttpStatus.OK);
     }
