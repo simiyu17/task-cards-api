@@ -1,9 +1,9 @@
 package com.card.task.service;
 
-import com.card.task.domain.Card;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
 import com.card.task.dto.CardSearchCriteria;
+import com.card.task.dto.CardUpdateRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostFilter;
@@ -14,7 +14,7 @@ public interface CardService {
 
     CardResponseDto createCard(@Valid CardRequestDto cardRequestDto);
 
-    CardResponseDto updateCard(Long cardId, @Valid CardRequestDto cardRequestDto);
+    CardResponseDto updateCard(Long cardId, @Valid CardUpdateRequestDto cardRequestDto);
 
     CardResponseDto findCardById(Long cardId);
 
@@ -22,6 +22,4 @@ public interface CardService {
     List<CardResponseDto> findAvailableCards(CardSearchCriteria searchCriteria, Pageable pageable);
 
     void deleteCard(Long cardId);
-
-    CardResponseDto updateCardStatus(Long cardId, Card.CardStatus status);
 }

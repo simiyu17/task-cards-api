@@ -2,6 +2,7 @@ package com.card.task.domain;
 
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardSearchCriteria;
+import com.card.task.dto.CardUpdateRequestDto;
 import com.card.task.exception.CardNotFoundException;
 import com.card.task.query.CardQueryBuilder;
 import com.card.util.ApplicationUtility;
@@ -31,7 +32,7 @@ public class CardRepositoryWrapper {
     }
 
 
-    public Card updateCard(Long cardId, CardRequestDto cardRequestDto) {
+    public Card updateCard(Long cardId, CardUpdateRequestDto cardRequestDto) {
         var card = this.findCardById(cardId);
         card.updateCard(cardRequestDto);
         return this.cardRepository.save(card);

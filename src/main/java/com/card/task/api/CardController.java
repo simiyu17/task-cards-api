@@ -5,6 +5,7 @@ import com.card.task.domain.Card;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
 import com.card.task.dto.CardSearchCriteria;
+import com.card.task.dto.CardUpdateRequestDto;
 import com.card.task.service.CardService;
 import com.card.util.AppConstant;
 import com.card.util.PageRequestBuilder;
@@ -33,13 +34,8 @@ public class CardController {
     }
 
     @PutMapping("/{card-id}")
-    public ResponseEntity<CardResponseDto> updateCard(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId, @RequestBody CardRequestDto cardRequestDto) {
+    public ResponseEntity<CardResponseDto> updateCard(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId, @RequestBody CardUpdateRequestDto cardRequestDto) {
         return new ResponseEntity<>(this.cardService.updateCard(cardId, cardRequestDto), HttpStatus.OK);
-    }
-
-    @PutMapping("/{card-id}/status")
-    public ResponseEntity<CardResponseDto> updateCardStatus(@PathVariable(AppConstant.TASK_CARD_ID_PATH_PARAM) Long cardId, @RequestBody Card.CardStatus status) {
-        return new ResponseEntity<>(this.cardService.updateCardStatus(cardId, status), HttpStatus.OK);
     }
 
     @GetMapping("/{card-id}")

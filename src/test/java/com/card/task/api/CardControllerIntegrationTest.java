@@ -6,24 +6,27 @@ import com.card.task.dto.CardResponseDto;
 import com.card.util.AppConstant;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.instancio.Select.field;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@Sql("/sql/cardDataForUserPermissionTest.sql")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CardControllerIntegrationTest extends IntegrationTestBase {
 
     private static final String BAD_REQUEST_CARD_POST_RESPONSE = "{\"createCard.cardRequestDto.taskName\":\"Task card name is mandatory\"," +
             "\"createCard.cardRequestDto.color\":\"Invalid color provided\"}";
 
 
+    @Order(1)
     @Test
+    @Sql("/sql/insertSampleCardData.sql")
     void given_valid_card_request_to_make_post_request_then_create_card_and_return_card_response() throws Exception {
         setUpUser(AppConstant.DEFAULT_MEMBER_USER_EMAIL_ADDRESS);
         var postCardIdUrl = "/cards";
@@ -74,7 +77,7 @@ class CardControllerIntegrationTest extends IntegrationTestBase {
         Assertions.assertThat(response.getBody()).isNotNull();
         Assertions.assertThat(response.getBody()).hasFieldOrPropertyWithValue("id", 10005L)
                 .hasFieldOrPropertyWithValue("taskName", "Test5 task")
-                .hasFieldOrPropertyWithValue("dateCreated", "2023-06-14");
+                .hasFieldOrPropertyWithValue("dateCreated", "2023-06-12");
     }
 
     @Test
@@ -85,7 +88,7 @@ class CardControllerIntegrationTest extends IntegrationTestBase {
         Assertions.assertThat(response.getBody()).isNotNull();
         Assertions.assertThat(response.getBody()).hasFieldOrPropertyWithValue("id", 10005L)
                 .hasFieldOrPropertyWithValue("taskName", "Test5 task")
-                .hasFieldOrPropertyWithValue("dateCreated", "2023-06-14");
+                .hasFieldOrPropertyWithValue("dateCreated", "2023-06-12");
     }
 
     @Test
@@ -103,21 +106,34 @@ class CardControllerIntegrationTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.detail").value(AppConstant.NOT_PERMITTED_RESPONSE_MSG));
     }
 
-   /* @Test
+    @Test
     void given_admin_user_fetching_for_cards_then_return_all_non_deleted_cards() throws Exception {
+        setUpUser(AppConstant.DEFAULT_ADMIN_USER_EMAIL_ADDRESS);
+        var getCardsUrl = "/cards";
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(getCardsUrl)
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_JSON_VALUE);
+
+        mvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(7)))
+                .andReturn();
+    }
+
+    @Test
+    void given_member_user_fetching_for_cards_then_return_all_non_deleted_cards_owned_by_user() throws Exception {
         setUpUser(AppConstant.DEFAULT_MEMBER_USER_EMAIL_ADDRESS);
         var getCardsUrl = "/cards";
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(getCardsUrl)
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
-        final var result = mvc.perform(requestBuilder)
+        mvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(4)))
                 .andReturn();
-    }*/
-
-
-
+    }
 
 }

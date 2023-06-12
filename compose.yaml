@@ -1,10 +1,32 @@
+version: '3.8'
+
 services:
-  mysql:
-    image: 'mysql/mysql-server:8.0.32'
+  mysql_db:
+    container_name: mysql_db
+    image: mysql:8.0.24
     environment:
-      - 'MYSQL_DATABASE=task_card'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      - MYSQL_ROOT_PASSWORD=p321@Root
     ports:
-      - '3306'
+      - "3309:3306"
+    networks:
+      - cards-app-net
+  cards-api:
+    container_name: cards_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    networks:
+      - cards-app-net
+    environment:
+      - MYSQL_HOST=mysql_db
+      - MYSQL_PORT=3306
+      - MYSQL_ROOT_PASSWORD=p321@Root
+    depends_on:
+      - mysql_db
+    ports:
+      - "8082:8082"
+
+networks:
+  cards-app-net:
+    driver: bridge

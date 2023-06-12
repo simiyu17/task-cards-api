@@ -1,5 +1,6 @@
 package com.card.shared.exceptions;
 
+import com.card.auth.exception.UserAuthenticationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolationException;
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler({ AuthenticationException.class })
+    @ExceptionHandler({ AuthenticationException.class, UserAuthenticationException.class})
     public ErrorResponse handleAuthenticationException(AuthenticationException ex) {
         return ErrorResponse.builder(ex, HttpStatus.UNAUTHORIZED, ex.getMessage())
                 .title("Not Authenticated")

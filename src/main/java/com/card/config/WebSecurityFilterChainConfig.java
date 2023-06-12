@@ -3,7 +3,8 @@ package com.card.config;
 
 
 import com.card.security.JWTAuthorizationFilter;
-import com.card.security.permission.TaskCardServiceOwnerShipInterceptor;
+import com.card.security.exception.RestAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,9 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -30,6 +31,7 @@ public class WebSecurityFilterChainConfig {
 
     private final AuthenticationProvider authenticationProvider;
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
+    private final AuthenticationEntryPoint authEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/auth/**",
@@ -40,9 +42,12 @@ public class WebSecurityFilterChainConfig {
             "/swagger-resources/**"
     };
 
-    public WebSecurityFilterChainConfig(AuthenticationProvider authenticationProvider, JWTAuthorizationFilter jwtAuthorizationFilter) {
+    public WebSecurityFilterChainConfig(AuthenticationProvider authenticationProvider,
+                                        JWTAuthorizationFilter jwtAuthorizationFilter,
+                                        @Qualifier("customAuthenticationEntryPoint") AuthenticationEntryPoint authEntryPoint) {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -61,7 +66,10 @@ public class WebSecurityFilterChainConfig {
                 .logout(logout ->{
                     logout.logoutUrl("/auth/logout");
                     logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
-                });
+                })
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(new RestAccessDeniedHandler()));
 
         return http.build();
     }

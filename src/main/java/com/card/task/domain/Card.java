@@ -2,6 +2,7 @@ package com.card.task.domain;
 
 import com.card.shared.entity.BaseEntity;
 import com.card.task.dto.CardRequestDto;
+import com.card.task.dto.CardUpdateRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,17 +40,25 @@ public class Card extends BaseEntity {
         return new Card(cardRequestDto.taskName(), cardRequestDto.description(), cardRequestDto.color());
     }
 
-    public void updateCard(CardRequestDto cardRequestDto){
-        if(StringUtils.isNotBlank(cardRequestDto.taskName()) && !StringUtils.equals(cardRequestDto.taskName(), this.name)){
-            this.name = cardRequestDto.taskName();
+    public void updateCard(CardUpdateRequestDto cardRequestDto){
+        final var newName = cardRequestDto.taskName();
+        if(StringUtils.isNotBlank(newName) && !StringUtils.equals(newName, this.name)){
+            this.name = newName.trim();
         }
 
-        if(!StringUtils.equals(cardRequestDto.description(), this.description)){
-            this.description = StringUtils.defaultIfEmpty(cardRequestDto.description(), null);
+        final var newDesc = cardRequestDto.description();
+        if(Objects.nonNull(newDesc) && !StringUtils.equals(newDesc, this.description)){
+            this.description = StringUtils.defaultIfBlank(newDesc.trim(), null);
         }
 
-        if(!StringUtils.equals(cardRequestDto.color(), this.color)){
-            this.color = StringUtils.defaultIfEmpty(cardRequestDto.color(), null);
+        final var newColor = cardRequestDto.color();
+        if(Objects.nonNull(newColor) && !StringUtils.equals(newColor, this.color)){
+            this.color = StringUtils.defaultIfBlank(newColor.trim(), null);
+        }
+
+        final var newStatus = cardRequestDto.status();
+        if(Objects.nonNull(newStatus) && !Objects.equals(newStatus, this.cardStatus)){
+            this.cardStatus = newStatus;
         }
 
     }

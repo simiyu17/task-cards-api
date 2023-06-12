@@ -4,6 +4,7 @@ import com.card.task.domain.Card;
 import com.card.task.domain.CardRepositoryWrapper;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
+import com.card.task.dto.CardUpdateRequestDto;
 import com.card.task.mapper.CardMapper;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
@@ -41,9 +42,9 @@ class CardServiceTest {
     @Test
     void updateCard() {
         Card card = Instancio.create(Card.class);
-        CardRequestDto cardRequestDto = Instancio.create(CardRequestDto.class);
+        CardUpdateRequestDto cardRequestDto = Instancio.create(CardUpdateRequestDto.class);
         CardResponseDto cardResponseDto = Instancio.create(CardResponseDto.class);
-        when(cardRepositoryWrapper.updateCard(anyLong(), any(CardRequestDto.class))).thenReturn(card);
+        when(cardRepositoryWrapper.updateCard(anyLong(), any(CardUpdateRequestDto.class))).thenReturn(card);
         when(cardMapper.fromEntity(any(Card.class))).thenReturn(cardResponseDto);
         final var cardResponseDtoDto = cardService.updateCard(100001L, cardRequestDto);
         Assertions.assertThat(cardResponseDtoDto).isNotNull().isEqualTo(cardResponseDto);

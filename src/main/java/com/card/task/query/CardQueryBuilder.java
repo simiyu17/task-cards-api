@@ -23,7 +23,7 @@ public class CardQueryBuilder {
         List<Predicate> predicateList = new ArrayList<>();
 
         if(Objects.nonNull(cardSearchCriteria.name())){
-            BooleanExpression expression = qCard.name.likeIgnoreCase(cardSearchCriteria.name());
+            BooleanExpression expression = qCard.name.likeIgnoreCase("%"+cardSearchCriteria.name()+"%");
             predicateList.add(expression);
         }
 

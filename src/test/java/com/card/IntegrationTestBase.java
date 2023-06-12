@@ -6,8 +6,6 @@ import com.card.security.JwtTokenUtil;
 import com.card.task.service.CardService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,16 +49,6 @@ public abstract class IntegrationTestBase {
         mySQLContainer.withUrlParam("serverTimezone", "UTC")
                 .withReuse(true)
                 .start();
-    }
-
-    @BeforeAll
-    protected static void beforeAll() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mySQLContainer.stop();
     }
 
     /**

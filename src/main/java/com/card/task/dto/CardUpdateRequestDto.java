@@ -1,17 +1,17 @@
 package com.card.task.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.card.task.domain.Card;
 import jakarta.validation.constraints.Pattern;
 
 import java.io.Serializable;
 
-public record CardRequestDto(
-        @NotBlank(message = "{card.name.missing}")
+public record CardUpdateRequestDto(
         String taskName,
         String description,
 
         @Pattern(regexp = "^(#[a-fA-F0-9]{6}|\\s*)$", message = "{color.code.invalid}")
-        String color
+        String color,
+        Card.CardStatus status
 ) implements Serializable {
 
 }

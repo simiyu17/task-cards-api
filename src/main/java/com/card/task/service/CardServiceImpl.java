@@ -1,10 +1,10 @@
 package com.card.task.service;
 
-import com.card.task.domain.Card;
 import com.card.task.domain.CardRepositoryWrapper;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardResponseDto;
 import com.card.task.dto.CardSearchCriteria;
+import com.card.task.dto.CardUpdateRequestDto;
 import com.card.task.mapper.CardMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class CardServiceImpl implements CardService{
     }
 
     @Override
-    public CardResponseDto updateCard(Long cardId, @Valid CardRequestDto cardRequestDto) {
+    public CardResponseDto updateCard(Long cardId, @Valid CardUpdateRequestDto cardRequestDto) {
         return this.cardMapper.fromEntity(this.cardRepositoryWrapper.updateCard(cardId, cardRequestDto));
     }
 
@@ -52,10 +52,5 @@ public class CardServiceImpl implements CardService{
     @Override
     public void deleteCard(Long cardId) {
         this.cardRepositoryWrapper.deleteCard(cardId);
-    }
-
-    @Override
-    public CardResponseDto updateCardStatus(Long cardId, Card.CardStatus status) {
-        return this.cardMapper.fromEntity(this.cardRepositoryWrapper.updateCardStatus(cardId, status));
     }
 }

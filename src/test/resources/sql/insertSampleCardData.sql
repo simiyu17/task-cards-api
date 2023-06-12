@@ -1,3 +1,6 @@
+-- Clear cards table as this script is used in more than one test class --
+delete from cards;
+
 insert into cards(id, name, color, card_status, date_created, created_by_id)
 values(10001, 'Test1 task', '#000000', 'TODO', '2023-06-11', 1);
 
@@ -11,7 +14,7 @@ insert into cards(id, name, color, card_status, date_created, created_by_id)
 values(10004, 'Test4 task', '#808080', 'DELETED', '2023-03-14', 1);
 
 insert into cards(id, name, color, card_status, date_created, created_by_id)
-values(10005, 'Test5 task', '#FF0000', 'TODO', '2023-06-14', 2);
+values(10005, 'Test5 task', '#FF0000', 'TODO', '2023-06-12', 2);
 
 insert into cards(id, name, color, card_status, date_created, created_by_id)
 values(10006, 'Test6 task', '#800080', 'IN_PROGRESS', '2023-05-13', 2);
