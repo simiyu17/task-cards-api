@@ -1,4 +1,4 @@
-package com.card.security.permission;
+package com.card.security;
 
 import com.card.task.service.CardService;
 import com.card.util.AppConstant;
@@ -32,8 +32,8 @@ public class TaskCardServiceOwnerShipInterceptor implements HandlerInterceptor {
         final var requestVariablesMap = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         String cardId = Objects.nonNull(requestVariablesMap) ? requestVariablesMap.get(AppConstant.TASK_CARD_ID_PATH_PARAM) : null;
         if(StringUtils.isNoneEmpty(cardId)){
-        checkUserCardPermission(Long.valueOf(cardId));
-    }
+            checkUserCardPermission(Long.valueOf(cardId));
+        }
         return true;
     }
 
@@ -43,7 +43,7 @@ public class TaskCardServiceOwnerShipInterceptor implements HandlerInterceptor {
         var authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         final var card = cardService.findCardById(cardId);
         if (!StringUtils.equals(auth.getName(), card.createdBy()) && !authorities.contains(AppConstant.ADMIN_ROLE.getName())) {
-            throw new AccessDeniedException(AppConstant.NOT_PERMITTED_RESPONSE_MSG);
+            throw new AccessDeniedException("Access Denied");
         }
     }
 }

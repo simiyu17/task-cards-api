@@ -38,10 +38,10 @@ public class CardRepositoryWrapper {
         return this.cardRepository.save(card);
     }
 
-    public Card updateCardStatus(Long cardId, Card.CardStatus status) {
+    public void updateCardStatus(Long cardId, Card.CardStatus status) {
         var card = this.findCardById(cardId);
         card.setCardStatus(status);
-        return this.cardRepository.save(card);
+        this.cardRepository.save(card);
     }
 
     @Transactional(readOnly = true)

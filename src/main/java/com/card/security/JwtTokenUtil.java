@@ -1,6 +1,5 @@
 package com.card.security;
 
-import com.card.auth.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -40,11 +39,9 @@ public class JwtTokenUtil {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    public static String createToken(User user) {
+    public static String createToken(String userName) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("user_id", user.getId())
-                .claim("user_full_name", user.getUserFullNameFromClient())
+                .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes())

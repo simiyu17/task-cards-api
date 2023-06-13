@@ -3,10 +3,7 @@ package com.card.task.domain;
 import com.card.shared.entity.BaseEntity;
 import com.card.task.dto.CardRequestDto;
 import com.card.task.dto.CardUpdateRequestDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -25,6 +22,9 @@ public class Card extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private CardStatus cardStatus;
+
+    @Transient
+    private String createdByUsername;
 
     public Card() {
     }
@@ -81,6 +81,11 @@ public class Card extends BaseEntity {
 
     public CardStatus getCardStatus() {
         return cardStatus;
+    }
+
+    public String getCreatedByUsername() {
+        this.createdByUsername = Objects.nonNull(this.getCreatedBy()) ? this.getCreatedBy().getUsername() : "";
+        return this.createdByUsername;
     }
 
     public String getCardStatusOrNull() {

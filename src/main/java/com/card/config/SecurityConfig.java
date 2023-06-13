@@ -1,5 +1,7 @@
 package com.card.config;
 
+import com.card.security.TaskCardServiceOwnerShipInterceptor;
+import com.card.task.service.CardService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,9 +11,17 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
+
+    private final CardService cardService;
+
+    public SecurityConfig(CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,7 +42,10 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
-
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor( new TaskCardServiceOwnerShipInterceptor(cardService) );
+    }
 
 
 }

@@ -14,8 +14,6 @@ public enum AppConstant {
     public static final String DEFAULT_TEST_USER_EMAIL_ADDRESS = "test.test@yahoo.com";
     public static final String DEFAULT_TEST_USER_PASSWORD = "test@123";
     public static final String LOGIN_SUCCESS_MESSAGE = "Login Successful";
-    public static final String NOT_PERMITTED_RESPONSE_MSG = "You do not have enough permissions to perform the operation !!";
-
     AppConstant(String name) {
         this.name = name;
     }

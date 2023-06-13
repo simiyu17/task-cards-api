@@ -57,7 +57,7 @@ public abstract class IntegrationTestBase {
     protected void setUpUser(String userName){
         headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer "+ JwtTokenUtil.createToken(userService.findUserByUserName(userName)));
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer "+ JwtTokenUtil.createToken(userName));
     }
 
 }

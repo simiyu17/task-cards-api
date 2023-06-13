@@ -73,6 +73,7 @@ public class CardController {
             @ApiResponse(responseCode = "401", description = "Unauthenticated User")
             @ApiResponse(responseCode = "403", description = "Unauthorized User")
     public ResponseEntity<List<CardResponseDto>> findAvailableCards(
+            @Schema(description = "Use this to get all cards that contain the filter text in their name")
             @RequestParam(required = false) String cardName,
             @Schema(description = "Color filter for example #C0C0C0")
             @RequestParam(required = false) String color,

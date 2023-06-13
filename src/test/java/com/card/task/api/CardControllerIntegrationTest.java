@@ -102,8 +102,8 @@ class CardControllerIntegrationTest extends IntegrationTestBase {
         mvc.perform(requestBuilder)
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType("application/problem+json"))
-                .andExpect(jsonPath("$.title").value("Not Permitted"))
-                .andExpect(jsonPath("$.detail").value(AppConstant.NOT_PERMITTED_RESPONSE_MSG));
+                .andExpect(jsonPath("$.title").value("Card Found, but you do not have enough permissions"))
+                .andExpect(jsonPath("$.detail").value("Access Denied"));
     }
 
     @Test

@@ -5,12 +5,16 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class will run immediately the server is up
+ * to create default users if they don't exist
+ */
 @Component
-public class ApplicationRunnerImpl implements ApplicationRunner {
+public class ApplicationDefaultUsersCreatorRunner implements ApplicationRunner {
 
     private final UserService userService;
 
-    public ApplicationRunnerImpl(UserService userService) {
+    public ApplicationDefaultUsersCreatorRunner(UserService userService) {
         this.userService = userService;
     }
 

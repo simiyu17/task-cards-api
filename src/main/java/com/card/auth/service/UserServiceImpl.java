@@ -56,16 +56,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponse authenticateUser(@Valid final JwtRequest request) {
           final var userDetails = currentUserDetails.loadUserByUsername(request.username());
-          final var user = findUserByUserName(userDetails.getUsername());
           this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, request.password(), userDetails.getAuthorities()));
-          return new LoginResponse(AppConstant.LOGIN_SUCCESS_MESSAGE, JwtTokenUtil.createToken(user));
+          return new LoginResponse(AppConstant.LOGIN_SUCCESS_MESSAGE, JwtTokenUtil.createToken(userDetails.getUsername()));
     }
 
 
     @Transactional
     @Override
     public void createDefaultUsers(){
-        if (this.userRepository.findAll().isEmpty()) {
+        final var users = this.userRepository.findAll();
+        if (users.isEmpty()) {
             final var adminUserDto = new UserDto("Daniel", "Simiyu", AppConstant.DEFAULT_ADMIN_USER_EMAIL_ADDRESS, AppConstant.DEFAULT_ADMIN_USER_PASSWORD, Set.of(AppConstant.ADMIN_ROLE.getName()));
             final var memberUserDto = new UserDto("John", "Doe", AppConstant.DEFAULT_MEMBER_USER_EMAIL_ADDRESS, AppConstant.DEFAULT_MEMBER_USER_PASSWORD, Set.of(AppConstant.MEMBER_ROLE.getName()));
             this.createUser(adminUserDto);

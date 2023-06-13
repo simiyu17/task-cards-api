@@ -3,6 +3,15 @@ package com.card.task.api;
 public enum SwaggerDocumentationConstant {
     SWAGGER_DOCUMENTATION_CONSTANT;
 
+    public static final String CARD_API_DOCUMENT_DESC = """
+            Task cards APIs Documentation.
+            All endpoints except 'authenticate' endpoint
+            require a user to be authenticated.
+            
+            Read the description at each endpoint
+            as they contain import information
+            on how to use and endpoint.
+            """;
     public static final String CARDS_SEARCH_AND_FILTER_DESC = """
                     Search for task cards. All available filters are optional.
                     All filters here work in 'and' version, this means that for

@@ -2,7 +2,6 @@ package com.card.shared.entity;
 
 import com.card.auth.domain.User;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,7 +24,7 @@ public class BaseEntity implements Serializable {
     @LastModifiedDate
     private LocalDate lastModified;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id")
     private User createdBy;
 

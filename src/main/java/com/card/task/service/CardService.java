@@ -6,6 +6,7 @@ import com.card.task.dto.CardSearchCriteria;
 import com.card.task.dto.CardUpdateRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 
 import java.util.List;
@@ -16,9 +17,10 @@ public interface CardService {
 
     CardResponseDto updateCard(Long cardId, @Valid CardUpdateRequestDto cardRequestDto);
 
+    @PostAuthorize("returnObject.createdBy == authentication.principal.username or hasRole('ROLE_ADMIN')")
     CardResponseDto findCardById(Long cardId);
 
-    @PostFilter("filterObject.createdBy==authentication.principal.username or hasRole('ROLE_ADMIN')")
+    @PostFilter("filterObject.createdBy == authentication.principal.username or hasRole('ROLE_ADMIN')")
     List<CardResponseDto> findAvailableCards(CardSearchCriteria searchCriteria, Pageable pageable);
 
     void deleteCard(Long cardId);

@@ -4,6 +4,7 @@ import com.card.auth.exception.UserAuthenticationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -54,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ErrorResponse handleAccessDeniedException(AccessDeniedException ex) {
         return ErrorResponse.builder(ex, HttpStatus.FORBIDDEN, ex.getMessage())
-                .title("Not Permitted")
+                .title("Card Found, but you do not have enough permissions")
                 .property(TIME_STAMP, Instant.now())
                 .build();
     }
@@ -76,6 +77,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(value = { PropertyReferenceException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlePropertyReferenceException(PropertyReferenceException ex) {
+        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage())
+                .title("Unknown Property")
+                .property(TIME_STAMP, Instant.now())
+                .build();
+    }
 
     @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
