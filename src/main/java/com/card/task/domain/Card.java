@@ -14,6 +14,7 @@ import java.util.Objects;
 @Table(name = "cards")
 public class Card extends BaseEntity {
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -23,8 +24,6 @@ public class Card extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CardStatus cardStatus;
 
-    @Transient
-    private String createdByUsername;
 
     public Card() {
     }
@@ -81,11 +80,6 @@ public class Card extends BaseEntity {
 
     public CardStatus getCardStatus() {
         return cardStatus;
-    }
-
-    public String getCreatedByUsername() {
-        this.createdByUsername = Objects.nonNull(this.getCreatedBy()) ? this.getCreatedBy().getUsername() : "";
-        return this.createdByUsername;
     }
 
     public String getCardStatusOrNull() {
